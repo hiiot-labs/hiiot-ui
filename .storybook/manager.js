@@ -9,8 +9,7 @@ const theme = create({
   brandUrl: 'https://github.com/hiiot-labs/hiiot-ui',
   brandTarget: '_self',
   
-  // 自定义 logo
-  brandImage: './logo.svg',
+  // 自定义 logo (removed - file doesn't exist)
   
   // 颜色配置
   colorPrimary: '#3B82F6',
