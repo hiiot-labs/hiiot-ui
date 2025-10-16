@@ -6,7 +6,7 @@ const theme = create({
   
   // 品牌信息
   brandTitle: 'HiIoT UI',
-  brandUrl: 'https://github.com/hiiot-labs/hiiot-ui',
+  brandUrl: 'https://hiiot-ui.vercel.app/',
   brandTarget: '_self',
   
   // 自定义 logo (removed - file doesn't exist)
