@@ -5,11 +5,22 @@ const config: StorybookConfig = {
     "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
+  staticDirs: ['../public'],
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
   ],
+  managerHead: (head) => `
+    ${head}
+    <style>
+      .sidebar-header [title="HiIoT UI"] {
+        font-size: 18px !important;
+        font-weight: bold !important;
+        color: #3B82F6 !important;
+      }
+    </style>
+  `,
   framework: {
     name: "@storybook/react-vite",
     options: {}
