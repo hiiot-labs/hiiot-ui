@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite-vite';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { throttle } from '../../utils';
 

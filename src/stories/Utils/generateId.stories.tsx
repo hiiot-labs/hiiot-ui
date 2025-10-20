@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite-vite';
 import { useState } from 'react';
 import { generateId } from '../../utils';
 
@@ -188,7 +188,7 @@ function GenerateIdDemo() {
             <div style={{ fontFamily: 'monospace', fontSize: '14px', marginBottom: '10px' }}>
               <code>const fieldId = generateId('field');</code>
               <br />
-              <code>// 结果: field-a7k9m2x3n</code>
+              <code>{`/* 结果: field-a7k9m2x3n */`}</code>
             </div>
             <div style={{ backgroundColor: '#d4edda', padding: '10px', borderRadius: '4px' }}>
               <label htmlFor={generateId('field')} style={{ fontWeight: 'bold' }}>
@@ -219,7 +219,7 @@ function GenerateIdDemo() {
             <div style={{ fontFamily: 'monospace', fontSize: '14px', marginBottom: '10px' }}>
               <code>const componentId = generateId('modal');</code>
               <br />
-              <code>// 结果: modal-x3n8k7q2m</code>
+              <code>{`/* 结果: modal-x3n8k7q2m */`}</code>
             </div>
             <div style={{ backgroundColor: '#fff3cd', padding: '10px', borderRadius: '4px' }}>
               模拟模态框 ID: <code>{generateId('modal')}</code>
@@ -237,7 +237,7 @@ function GenerateIdDemo() {
             <div style={{ fontFamily: 'monospace', fontSize: '14px', marginBottom: '10px' }}>
               <code>const itemId = generateId('item');</code>
               <br />
-              <code>// 结果: item-k9m2x7n8q</code>
+              <code>{`/* 结果: item-k9m2x7n8q */`}</code>
             </div>
             <div style={{ backgroundColor: '#e6f3ff', padding: '10px', borderRadius: '4px' }}>
               <ul style={{ margin: 0, paddingLeft: '20px' }}>
@@ -263,12 +263,12 @@ function GenerateIdDemo() {
         }}>
           <pre>{`import { generateId } from '@hiiot/ui';
 
-// 基本用法
-const id1 = generateId(); // 默认前缀 'hiiot'
-const id2 = generateId('user'); // 前缀 'user'
-const id3 = generateId('item'); // 前缀 'item'
+/* 基本用法 */
+const id1 = generateId(); /* 默认前缀 'hiiot' */
+const id2 = generateId('user'); /* 前缀 'user' */
+const id3 = generateId('item'); /* 前缀 'item' */
 
-// 在 React 组件中使用
+/* 在 React 组件中使用 */
 function TodoItem({ text }) {
   const [id] = useState(() => generateId('todo'));
   
@@ -280,10 +280,10 @@ function TodoItem({ text }) {
   );
 }
 
-// 生成多个 ID
+/* 生成多个 ID */
 const ids = Array.from({ length: 5 }, () => generateId('batch'));
 console.log(ids);
-// ['batch-a7k9m2x3n', 'batch-n8q5w1r4p', ...]`}</pre>
+/* ['batch-a7k9m2x3n', 'batch-n8q5w1r4p', ...] */`}</pre>
         </div>
       </div>
 
