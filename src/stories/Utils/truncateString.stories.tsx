@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite-vite";
 import { truncateString } from "../../utils";
 import { useState } from "react";
 
@@ -926,7 +926,7 @@ function smartTruncate(
   const basicTruncated = truncateString(text, maxLength, suffix);
   
   // 如果是英文，尝试在单词边界截取
-  if (/^[a-zA-Z\s]+$/.test(text)) {
+  if (/^[a-zA-Z ]+$/.test(text)) {
     const words = text.split(' ');
     let result = '';
     

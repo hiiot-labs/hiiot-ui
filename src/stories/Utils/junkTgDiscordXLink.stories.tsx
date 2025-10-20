@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite-vite';
 import { junkTgDiscordXLink } from '../../utils';
 import { useState } from 'react';
 

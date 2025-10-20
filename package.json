@@ -110,10 +110,5 @@
         "type": "git",
         "url": "git+https://github.com/hiiot-labs/hiiot-ui.git"
     },
-    "homepage": "https://hiiot-ui.vercel.app",
-    "eslintConfig": {
-        "extends": [
-            "plugin:storybook/recommended"
-        ]
-    }
+    "homepage": "https://hiiot-ui.vercel.app"
 }
