@@ -1,112 +1,119 @@
 {
-  "name": "hiiot-ui",
-  "version": "1.0.0",
-  "description": "A React component library built with Vite, TypeScript, and Tailwind CSS",
-  "type": "module",
-  "packageManager": "pnpm@9.15.1",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+    "name": "hiiot-ui",
+    "version": "1.0.1",
+    "description": "A React component library built with Vite, TypeScript, and Tailwind CSS",
+    "type": "module",
+    "packageManager": "pnpm@9.15.1",
+    "main": "dist/index.js",
+    "module": "dist/index.esm.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.esm.js",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./utils": {
+            "import": "./dist/utils.esm.js",
+            "require": "./dist/utils.js",
+            "types": "./dist/utils.d.ts"
+        },
+        "./hooks": {
+            "import": "./dist/hooks.esm.js",
+            "require": "./dist/hooks.js",
+            "types": "./dist/hooks.d.ts"
+        }
     },
-    "./utils": {
-      "import": "./dist/utils.esm.js",
-      "require": "./dist/utils.js",
-      "types": "./dist/utils.d.ts"
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "scripts": {
+        "dev": "vite",
+        "build": "rollup -c",
+        "deploy": "bash ./deploy",
+        "build:types": "tsc --emitDeclarationOnly",
+        "preview": "vite preview",
+        "lint": "eslint src --ext .ts,.tsx",
+        "lint:fix": "eslint src --ext .ts,.tsx --fix",
+        "storybook": "storybook dev -p 6006",
+        "build-storybook": "storybook build",
+        "test": "vitest",
+        "test:ui": "vitest --ui",
+        "prepublishOnly": "npm run build"
     },
-    "./hooks": {
-      "import": "./dist/hooks.esm.js",
-      "require": "./dist/hooks.js",
-      "types": "./dist/hooks.d.ts"
+    "keywords": [
+        "react",
+        "components",
+        "ui",
+        "typescript",
+        "tailwindcss",
+        "vite",
+        "hiiot"
+    ],
+    "author": "hiiot-ui",
+    "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "peerDependencies": {
+        "react": ">=16.8.0",
+        "react-dom": ">=16.8.0"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-typescript": "^11.1.5",
+        "@storybook/addon-essentials": "^8.6.14",
+        "@storybook/addon-interactions": "^8.6.14",
+        "@storybook/addon-links": "^8.6.14",
+        "@storybook/blocks": "^8.6.14",
+        "@storybook/manager-api": "^8.6.14",
+        "@storybook/react": "^8.6.14",
+        "@storybook/react-vite": "^8.6.14",
+        "@storybook/testing-library": "^0.2.2",
+        "@storybook/theming": "^8.6.14",
+        "@types/react": "^18.2.43",
+        "@types/react-dom": "^18.2.17",
+        "@typescript-eslint/eslint-plugin": "^6.14.0",
+        "@typescript-eslint/parser": "^6.14.0",
+        "@vitejs/plugin-react": "^4.2.1",
+        "@vitest/ui": "^3.2.4",
+        "autoprefixer": "^10.4.16",
+        "eslint": "^8.55.0",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-storybook": "^9.1.10",
+        "postcss": "^8.4.32",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "rollup": "^4.9.1",
+        "rollup-plugin-dts": "^6.1.0",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "rollup-plugin-postcss": "^4.0.2",
+        "sass": "^1.93.2",
+        "storybook": "^8.6.14",
+        "tailwindcss": "^3.3.6",
+        "typescript": "^5.3.3",
+        "vite": "^5.0.8",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "@headlessui/react": "^2.2.9",
+        "clsx": "^2.0.0",
+        "dayjs": "^1.11.18",
+        "react-countup": "^6.5.3",
+        "react-hot-toast": "^2.6.0",
+        "swr": "^2.3.6"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hiiot-labs/hiiot-ui.git"
+    },
+    "homepage": "https://hiiot-ui.vercel.app",
+    "eslintConfig": {
+        "extends": [
+            "plugin:storybook/recommended"
+        ]
     }
-  },
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "scripts": {
-    "dev": "vite",
-    "build": "rollup -c",
-    "build:types": "tsc --emitDeclarationOnly",
-    "preview": "vite preview",
-    "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "prepublishOnly": "npm run build"
-  },
-  "keywords": [
-    "react",
-    "components",
-    "ui",
-    "typescript",
-    "tailwindcss",
-    "vite",
-    "hiiot"
-  ],
-  "author": "hiiot-ui",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.5",
-    "@storybook/addon-essentials": "^8.6.14",
-    "@storybook/addon-interactions": "^8.6.14",
-    "@storybook/addon-links": "^8.6.14",
-    "@storybook/blocks": "^8.6.14",
-    "@storybook/manager-api": "^8.6.14",
-    "@storybook/react": "^8.6.14",
-    "@storybook/react-vite": "^8.6.14",
-    "@storybook/testing-library": "^0.2.2",
-    "@storybook/theming": "^8.6.14",
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "@vitest/ui": "^3.2.4",
-    "autoprefixer": "^10.4.16",
-    "eslint": "^8.55.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-storybook": "^9.1.10",
-    "postcss": "^8.4.32",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rollup": "^4.9.1",
-    "rollup-plugin-dts": "^6.1.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "sass": "^1.93.2",
-    "storybook": "^8.6.14",
-    "tailwindcss": "^3.3.6",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.8",
-    "vitest": "^3.2.4"
-  },
-  "dependencies": {
-    "@headlessui/react": "^2.2.9",
-    "clsx": "^2.0.0",
-    "react-countup": "^6.5.3",
-    "react-hot-toast": "^2.6.0",
-    "swr": "^2.3.6"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
-  }
 }

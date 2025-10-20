@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+show_help() {
+  cat <<'EOF'
+用法: ./deploy.ssh [patch|minor|major|prerelease] [选项]
+
+选项:
+  --dry, --dry-run     以干跑模式执行发布（不真正发布）
+  --tag <tag>          指定 npm dist-tag（默认: latest）
+  --registry <url>     指定发布 registry（默认: npmjs）
+  --otp <code>         如启用 2FA，提供一次性验证码
+  --skip-tests         跳过测试
+  --skip-lint          跳过 lint
+  --no-git             跳过 Git 提交与推送
+  -h, --help           显示帮助
+
+示例:
+  ./deploy.ssh                # 以 patch 升级发布到 latest
+  ./deploy.ssh minor --dry    # 以 minor 升级，干跑发布
+  ./deploy.ssh patch --tag beta --registry https://registry.npmjs.org/
+EOF
+}
+
+log() { printf "\033[1;34m==>\033[0m %s\n" "$*"; }
+err() { printf "\033[1;31mERROR:\033[0m %s\n" "$*" >&2; }
+
+# 解析参数
+RELEASE=${1:-patch}
+if [[ $# -gt 0 ]]; then shift || true; fi
+
+DRY_RUN=0
+TAG="latest"
+REGISTRY=""
+OTP=""
+SKIP_TESTS=0
+SKIP_LINT=0
+NO_GIT=0
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry|--dry-run) DRY_RUN=1; shift;;
+    --tag) TAG="$2"; shift 2;;
+    --registry) REGISTRY="$2"; shift 2;;
+    --otp) OTP="$2"; shift 2;;
+    --skip-tests) SKIP_TESTS=1; shift;;
+    --skip-lint) SKIP_LINT=1; shift;;
+    --no-git) NO_GIT=1; shift;;
+    -h|--help) show_help; exit 0;;
+    patch|minor|major|prerelease) RELEASE="$1"; shift;;
+    *) err "未知参数: $1"; show_help; exit 1;;
+  esac
+done
+
+cd "$PROJECT_ROOT"
+
+[[ -f package.json ]] || { err "未找到 package.json，请在项目根目录运行。"; exit 1; }
+
+PKG_NAME=$(node -p "require('./package.json').name")
+CURRENT_VERSION=$(node -p "require('./package.json').version")
+
+log "包信息: $PKG_NAME@$CURRENT_VERSION"
+
+# 登录检测（不强制退出，提示即可）
+WHOAMI_CMD=(npm whoami)
+if [[ -n "$REGISTRY" ]]; then WHOAMI_CMD+=(--registry "$REGISTRY"); fi
+if ! "${WHOAMI_CMD[@]}" >/dev/null 2>&1; then
+  log "未检测到 npm 登录。请先执行 'npm login' 或配置环境变量 NPM_TOKEN。"
+fi
+
+# Git 工作区校验（如不跳过）
+if command -v git >/dev/null 2>&1 && [[ "$NO_GIT" -eq 0 ]]; then
+  if ! git diff --quiet || ! git diff --cached --quiet; then
+    err "Git 工作区不干净，请提交或暂存你的更改后重试。"
+    exit 1
+  fi
+fi
+
+# 安装依赖
+log "安装依赖..."
+pnpm install --frozen-lockfile
+
+# Lint
+if [[ "$SKIP_LINT" -eq 0 ]]; then
+  log "运行 lint..."
+  pnpm run lint || { err "Lint 失败"; exit 1; }
+fi
+
+# Tests
+if [[ "$SKIP_TESTS" -eq 0 ]]; then
+  log "运行测试..."
+  pnpm run test -- --run || { err "测试失败"; exit 1; }
+fi
+
+# 清理并构建
+log "清理 dist..."
+rm -rf dist
+
+log "生成类型声明..."
+pnpm run build:types
+
+log "打包构建..."
+pnpm run build
+
+# 产物校验
+[[ -f dist/index.js ]] || { err "缺少 dist/index.js"; exit 1; }
+[[ -f dist/index.d.ts ]] || { err "缺少 dist/index.d.ts (类型声明)"; exit 1; }
+
+# 打包预览
+log "打包预览 (npm pack --dry-run)..."
+npm pack --dry-run
+
+# 版本升级
+log "版本升级: $RELEASE"
+if [[ "$NO_GIT" -eq 0 ]]; then
+  npm version "$RELEASE" -m "chore(release): %s"
+else
+  npm version "$RELEASE" --no-git-tag-version
+fi
+
+NEW_VERSION=$(node -p "require('./package.json').version")
+log "准备发布版本: $NEW_VERSION"
+
+# 发布命令组装
+PUBLISH_CMD=(npm publish)
+if [[ "$TAG" != "latest" ]]; then PUBLISH_CMD+=(--tag "$TAG"); fi
+if [[ -n "$REGISTRY" ]]; then PUBLISH_CMD+=(--registry "$REGISTRY"); fi
+if [[ -n "$OTP" ]]; then PUBLISH_CMD+=(--otp "$OTP"); fi
+
+# 仅对 scoped 包传递 --access public
+if [[ "$PKG_NAME" == @*/* ]]; then
+  PUBLISH_CMD+=(--access public)
+fi
+
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  log "执行发布干跑 (不真正发布)..."
+  PUBLISH_CMD+=(--dry-run)
+fi
+
+log "发布命令: ${PUBLISH_CMD[*]}"
+"${PUBLISH_CMD[@]}"
+
+# 推送 Git 标签（非干跑且未跳过）
+if command -v git >/dev/null 2>&1 && [[ "$NO_GIT" -eq 0 && "$DRY_RUN" -eq 0 ]]; then
+  log "推送 Git 标签..."
+  git push && git push --tags
+fi
+
+log "✅ 发布流程完成：$PKG_NAME@$NEW_VERSION"
