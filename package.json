@@ -1,6 +1,6 @@
 {
     "name": "hiiot-ui",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "A React component library built with Vite, TypeScript, and Tailwind CSS",
     "type": "module",
     "packageManager": "pnpm@9.15.1",
