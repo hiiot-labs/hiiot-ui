@@ -20,8 +20,8 @@ export function useFetch<T = any>(
         const res: any = await fetcherGet<T>(url, "GET", body);
 
         // 回调函数,无论错误还是成功可以在此处做逻辑
-        if (config.callback) {
-          config.callback(res);
+        if (config?.callback) {
+          config?.callback(res);
         }
         if (res.error.code !== 0) {
           return Promise.reject(res.error.message);
